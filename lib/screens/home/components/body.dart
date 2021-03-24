@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/constants.dart';
+import 'package:shop_app/screens/details/details_screen.dart';
+import 'categories.dart';
+import '../../../models/Product.dart';
+import 'item_card.dart';
 
 class Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: defaultPadding),
@@ -12,45 +17,35 @@ class Body extends StatelessWidget {
             "Women",
             style: Theme.of(context)
                 .textTheme
-                .headline5
+                .headline3
                 .copyWith(fontWeight: FontWeight.bold),
           ),
         ),
-        Categories()
+        Categories(),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: GridView.count(
+              crossAxisCount: 2,
+              mainAxisSpacing: defaultPadding,
+              crossAxisSpacing: defaultPadding,
+              childAspectRatio: 0.7,
+              children: List<Widget>.generate(products.length, (index) {
+                return ItemCard(
+                  product: products[index],
+                  press: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DetailsScreen(
+                              product: products[index],
+                            )),
+                  ),
+                );
+              }),
+            ),
+          ),
+        )
       ],
-    );
-  }
-}
-
-class Categories extends StatefulWidget {
-  @override
-  _CategoriesState createState() => _CategoriesState();
-}
-
-class _CategoriesState extends State<Categories> {
-  final List<String> categories = [
-    "hand bag",
-    "jewelery",
-    "footwear",
-    "dresses",
-    "gfdrfg",
-    "fgdrfgd",
-    "fedrgedrt",
-    "tuoerir"
-  ];
-  final int selectedIndex = 0;
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 35,
-      child: ListView.builder(
-        itemBuilder: (context, index) => Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(categories[index]),
-        ),
-        itemCount: categories.length,
-        scrollDirection: Axis.horizontal,
-      ),
     );
   }
 }
